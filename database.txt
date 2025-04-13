@@ -1,0 +1,65 @@
+-- Create the database
+CREATE DATABASE LibraryDB;
+USE LibraryDB;
+
+-- Create Members table
+CREATE TABLE Members (
+    member_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone VARCHAR(15),
+    join_date DATE
+);
+
+-- Create Books table
+CREATE TABLE Books (
+    book_id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    author VARCHAR(100),
+    genre VARCHAR(50),
+    total_copies INT,
+    available_copies INT
+);
+
+-- Create Staff table
+CREATE TABLE Staff (
+    staff_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    position VARCHAR(50),
+    email VARCHAR(100)
+);
+
+-- Create Borrow table (many-to-many relationship with Members and Books)
+CREATE TABLE Borrow (
+    borrow_id INT AUTO_INCREMENT PRIMARY KEY,
+    member_id INT,
+    book_id INT,
+    borrow_date DATE,
+    return_date DATE,
+    returned BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (member_id) REFERENCES Members(member_id),
+    FOREIGN KEY (book_id) REFERENCES Books(book_id)
+);
+
+-- Insert sample data into Members
+INSERT INTO Members (name, email, phone, join_date) VALUES
+('Alice Johnson', 'alice@example.com', '1234567890', '2024-01-15'),
+('Bob Smith', 'bob@example.com', '2345678901', '2024-02-20'),
+('Clara Lee', 'clara@example.com', '3456789012', '2024-03-10');
+
+-- Insert sample data into Books
+INSERT INTO Books (title, author, genre, total_copies, available_copies) VALUES
+('The Great Gatsby', 'F. Scott Fitzgerald', 'Fiction', 5, 3),
+('1984', 'George Orwell', 'Dystopian', 4, 4),
+('Python Programming', 'John Zelle', 'Education', 2, 1);
+
+-- Insert sample data into Staff
+INSERT INTO Staff (name, position, email) VALUES
+('David Allen', 'Librarian', 'david@library.com'),
+('Ellen Wright', 'Assistant', 'ellen@library.com');
+
+-- Insert sample data into Borrow
+INSERT INTO Borrow (member_id, book_id, borrow_date, return_date, returned) VALUES
+(1, 1, '2024-03-01', '2024-03-15', TRUE),
+(2, 3, '2024-04-01', NULL, FALSE),
+(3, 2, '2024-04-05', NULL, FALSE);
